@@ -1,6 +1,6 @@
-# helloworld-infrastructure-staging
+# trends-infrastructure-staging
 
-This repo holds the Kubernetes configuration files for the helloworld application.
+This repo holds the Kubernetes configuration files for the trends application.
 
 ## Target Environment
 
