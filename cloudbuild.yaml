@@ -26,6 +26,7 @@ steps:
       - name: 'kube'
         path: /kube
 
+  # Update the kompose deployment.
   - name: 'gcr.io/cloud-builders/gcloud'
     env:
       - 'KUBECONFIG=/kube/config'
