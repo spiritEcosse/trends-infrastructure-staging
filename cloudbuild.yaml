@@ -26,8 +26,6 @@ steps:
       - name: 'kube'
         path: /kube
 
-  # Recursively apply the configuration files under the kubernetes
-  # directory.
   - name: 'gcr.io/cloud-builders/gcloud'
     env:
       - 'KUBECONFIG=/kube/config'
@@ -35,7 +33,11 @@ steps:
     args:
       - '-c'
       - |
-        kubectl apply --recursive -f kubernetes
+        curl -L https://github.com/kubernetes/kompose/releases/download/v1.1.0/kompose-linux-amd64 -o kompose
+        chmod +x kompose
+        mv ./kompose /usr/local/bin/kompose
+        kompose down
+        kompose up
     volumes:
       - name: 'kube'
         path: /kube
