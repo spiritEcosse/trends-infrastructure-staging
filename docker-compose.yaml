@@ -10,13 +10,13 @@ services:
             - "5672:5672"
 
     worker:
-        image: gcr.io/trends-217607/trends:597d2095a6c8b9f231d8616a975260112fab6455
+        image: gcr.io/trends-217607/trends:600704260e19df8e55a0306a5a0c4009bed767d1
         command: celery -A trends worker
         depends_on:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:597d2095a6c8b9f231d8616a975260112fab6455
+        image: gcr.io/trends-217607/trends:600704260e19df8e55a0306a5a0c4009bed767d1
         command: celery -A trends flower --port=80
         ports:
             - "80:80"
