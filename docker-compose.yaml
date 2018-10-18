@@ -11,7 +11,7 @@ services:
 
     worker:
         image: gcr.io/trends-217607/trends:5dc31c724a2eeeab2070eeb237f6c65a328a41c2
-        command: celery -A trends worker
+        command: celery -A trends worker -l info
         depends_on:
             - rabbit
 
