@@ -15,7 +15,7 @@ services:
             kompose.service.type: LoadBalancer
 
     worker:
-        #image: gcr.io/trends-217607/trends:0508d8f2f424532e46a91e7aafc5b64f9c07419b
+        #image: gcr.io/trends-217607/trends:bcf2b159afb603405fb52405d2c9020821f273de
         build: .
         command: celery -A trends worker -P eventlet -c 20
         volumes:
@@ -27,7 +27,7 @@ services:
             - rabbit
 
     web:
-        #image: gcr.io/trends-217607/trends:0508d8f2f424532e46a91e7aafc5b64f9c07419b
+        #image: gcr.io/trends-217607/trends:bcf2b159afb603405fb52405d2c9020821f273de
         build: .
         volumes:
             - ~/.ipython:/root/.ipython
