@@ -2,21 +2,34 @@ version: '3'
 
 services:
     rabbit:
-        image: rabbitmq:latest
+        image: rabbitmq:management
         environment:
             - RABBITMQ_DEFAULT_USER=user
             - RABBITMQ_DEFAULT_PASS=pass
         ports:
             - "5672:5672"
+            - "15672:15672"
+        environment:
+            - GET_HOSTS_FROM=dns
+        labels:
+            kompose.service.type: LoadBalancer
 
     worker:
-        image: gcr.io/trends-217607/trends:09cf1e61d70f24a471ca7a16973d4cdf1a318c55
-        command: celery -A trends worker -l info
+        build: .
+        command: celery -A trends worker -P eventlet -c 20
+        volumes:
+            - ~/.ipython:/root/.ipython
+            - .:/app
+        environment:
+            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         depends_on:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:09cf1e61d70f24a471ca7a16973d4cdf1a318c55
+        build: .
+        volumes:
+            - ~/.ipython:/root/.ipython
+            - .:/app
         command: celery -A trends flower --port=80
         ports:
             - "80:80"
@@ -24,5 +37,26 @@ services:
             - worker
         environment:
             - GET_HOSTS_FROM=dns
+            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         labels:
             kompose.service.type: LoadBalancer
+
+    firefox:
+        image: selenium/standalone-firefox-debug:3.14.0-iron
+        container_name: firefox
+        volumes:
+            - /dev/shm:/dev/shm
+        ports:
+            - "4444:4444"
+            - "5901:5900"
+
+    redis:
+        image: redis:latest
+        container_name: redis
+        ports:
+          - "6379:6379"
+        volumes:
+          - redis_db:/data
+
+volumes:
+  redis_db:
