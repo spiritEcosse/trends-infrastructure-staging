@@ -9,15 +9,15 @@ services:
         ports:
             - "5672:5672"
             - "15672:15672"
-        environment:
-            - GET_HOSTS_FROM=dns
-        labels:
-            kompose.service.type: LoadBalancer
+         environment:
+             - GET_HOSTS_FROM=dns
+         labels:
+             kompose.service.type: LoadBalancer
 
     worker:
-        image: gcr.io/trends-217607/trends:031c2142c6c98f71b3c443ff14bb6da7b9ac547e
+        image: gcr.io/trends-217607/trends:deca118d0db4008c77417a8bbb408e89e180add9
 #        build: .
-        command: celery -A trends worker -P eventlet -c 20
+        command: celery -A trends worker -P eventlet -c 20 -l info
         volumes:
             - ~/.ipython:/root/.ipython
             - .:/app
@@ -27,7 +27,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:031c2142c6c98f71b3c443ff14bb6da7b9ac547e
+        image: gcr.io/trends-217607/trends:deca118d0db4008c77417a8bbb408e89e180add9
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
