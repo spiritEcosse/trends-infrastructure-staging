@@ -14,10 +14,46 @@ services:
          labels:
              kompose.service.type: LoadBalancer
 
-    worker:
-        image: gcr.io/trends-217607/trends:deca118d0db4008c77417a8bbb408e89e180add9
+    worker_write_to_google:
+        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
 #        build: .
-        command: celery -A trends worker -P eventlet -c 20 -l info
+        command: celery -A trends worker -l info -Q write_to_google
+        volumes:
+            - ~/.ipython:/root/.ipython
+            - .:/app
+        environment:
+            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+        depends_on:
+            - rabbit
+
+    worker_research_task:
+        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+#        build: .
+        command: celery -A trends worker -P eventlet -c 10 -l info -Q research_task
+        volumes:
+            - ~/.ipython:/root/.ipython
+            - .:/app
+        environment:
+            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+        depends_on:
+            - rabbit
+
+    worker_combinations:
+        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+#        build: .
+        command: celery -A trends worker -P eventlet -c 10 -l info -Q combinations
+        volumes:
+            - ~/.ipython:/root/.ipython
+            - .:/app
+        environment:
+            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+        depends_on:
+            - rabbit
+
+    worker_shutterstock_search:
+        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+#        build: .
+        command: celery -A trends worker -l info -Q shutterstock_search
         volumes:
             - ~/.ipython:/root/.ipython
             - .:/app
@@ -27,7 +63,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:deca118d0db4008c77417a8bbb408e89e180add9
+        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
@@ -36,7 +72,10 @@ services:
         ports:
             - "80:80"
         depends_on:
-            - worker
+            - worker_combinations
+            - worker_shutterstock_search
+            - worker_research_task
+            - worker_write_to_google
         environment:
             - GET_HOSTS_FROM=dns
             - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
