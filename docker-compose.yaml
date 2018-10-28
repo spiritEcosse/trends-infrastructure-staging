@@ -15,7 +15,7 @@ services:
             kompose.service.type: LoadBalancer
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+        image: gcr.io/trends-217607/trends:aaff78f9271387249c1580eafddcd1572ce9a0a3
 #        build: .
         command: celery -A trends worker -l info -Q write_to_google
         volumes:
@@ -27,7 +27,7 @@ services:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+        image: gcr.io/trends-217607/trends:aaff78f9271387249c1580eafddcd1572ce9a0a3
 #        build: .
         command: celery -A trends worker -P eventlet -c 10 -l info -Q research_task
         volumes:
@@ -39,7 +39,7 @@ services:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+        image: gcr.io/trends-217607/trends:aaff78f9271387249c1580eafddcd1572ce9a0a3
 #        build: .
         command: celery -A trends worker -P eventlet -c 10 -l info -Q combinations
         volumes:
@@ -51,7 +51,7 @@ services:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+        image: gcr.io/trends-217607/trends:aaff78f9271387249c1580eafddcd1572ce9a0a3
 #        build: .
         command: celery -A trends worker -l info -Q shutterstock_search
         volumes:
@@ -63,7 +63,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:a93eff9b349aed5b5963392a2bec3f4bca414adc
+        image: gcr.io/trends-217607/trends:aaff78f9271387249c1580eafddcd1572ce9a0a3
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
