@@ -4,8 +4,8 @@ services:
     rabbit:
         image: rabbitmq:management
         environment:
-            - RABBITMQ_DEFAULT_USER=quest
-            - RABBITMQ_DEFAULT_PASS=quest
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=pass
         ports:
             - "5672:5672"
             - "15672:15672"
@@ -15,7 +15,7 @@ services:
             kompose.service.type: LoadBalancer
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:e68c0d02e178f891dffe5b8a925757e9edbdbcb5
+        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
 #        build: .
         command: celery -A trends worker -l info -Q write_to_google
         volumes:
@@ -26,9 +26,9 @@ services:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:e68c0d02e178f891dffe5b8a925757e9edbdbcb5
+        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
 #        build: .
-        command: celery -A trends worker -P eventlet -c 10 -l info -Q research_task
+        command: celery -A trends worker -l info -Q research_task
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -37,9 +37,9 @@ services:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:e68c0d02e178f891dffe5b8a925757e9edbdbcb5
+        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
 #        build: .
-        command: celery -A trends worker -P eventlet -c 10 -l info -Q combinations
+        command: celery -A trends worker -l info -Q combinations
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -48,7 +48,7 @@ services:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:e68c0d02e178f891dffe5b8a925757e9edbdbcb5
+        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
 #        build: .
         command: celery -A trends worker -l info -Q shutterstock_search
         volumes:
@@ -59,7 +59,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:e68c0d02e178f891dffe5b8a925757e9edbdbcb5
+        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
