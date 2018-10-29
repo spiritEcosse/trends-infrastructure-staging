@@ -4,13 +4,11 @@ services:
     rabbit:
         image: rabbitmq:management
         environment:
-            - RABBITMQ_DEFAULT_USER=guest
-            - RABBITMQ_DEFAULT_PASS=guest
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=pass
         ports:
             - "5672:5672"
             - "15672:15672"
-        environment:
-            - GET_HOSTS_FROM=dns
         labels:
             kompose.service.type: LoadBalancer
 
