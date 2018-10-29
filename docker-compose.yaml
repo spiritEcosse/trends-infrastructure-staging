@@ -12,52 +12,53 @@ services:
         labels:
             kompose.service.type: LoadBalancer
 
+
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
+        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
 #        build: .
-        command: celery -A trends worker -l info -Q write_to_google
+        command: celery -A trends worker -l info -Q write_to_google -n write_to_google@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         depends_on:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
+        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
 #        build: .
-        command: celery -A trends worker -l info -Q research_task
+        command: celery -A trends worker -l info -Q research_task -n research_task@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         depends_on:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
+        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
 #        build: .
-        command: celery -A trends worker -l info -Q combinations
+        command: celery -A trends worker -l info -Q combinations -n combinations@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         depends_on:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
+        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
 #        build: .
-        command: celery -A trends worker -l info -Q shutterstock_search
+        command: celery -A trends worker -l info -Q shutterstock_search -n shutterstock_search@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         depends_on:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:da9f26a01ba1ec51633fd16c230bb16f71cfb8e0
+        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
@@ -70,7 +71,7 @@ services:
             - worker_research_task
             - worker_write_to_google
         environment:
-            - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         labels:
             kompose.service.type: LoadBalancer
 
