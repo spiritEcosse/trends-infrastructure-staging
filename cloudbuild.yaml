@@ -30,6 +30,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     env:
       - 'KUBECONFIG=/kube/config'
+      - 'SHUTTER_TOKEN=${_SHUTTER_TOKEN}'
     entrypoint: 'sh'
     args:
       - '-c'
