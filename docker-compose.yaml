@@ -9,8 +9,6 @@ services:
         ports:
             - "5672:5672"
             - "15672:15672"
-        environment:
-            - GET_HOSTS_FROM=dns
         labels:
             kompose.service.type: LoadBalancer
 
@@ -72,7 +70,6 @@ services:
             - worker_research_task
             - worker_write_to_google
         environment:
-            - GET_HOSTS_FROM=dns
             - TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
         labels:
             kompose.service.type: LoadBalancer
