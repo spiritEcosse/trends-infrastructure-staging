@@ -14,51 +14,51 @@ services:
 
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
+        image: gcr.io/trends-217607/trends:193599f2a213243072865f6d395e93b4a3821a56
 #        build: .
         command: celery -A trends worker -l info -Q write_to_google -n write_to_google@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - SHUTTER_TOKEN=${SHUTTER_TOKEN}
         depends_on:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
+        image: gcr.io/trends-217607/trends:193599f2a213243072865f6d395e93b4a3821a56
 #        build: .
         command: celery -A trends worker -l info -Q research_task -n research_task@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - SHUTTER_TOKEN=${SHUTTER_TOKEN}
         depends_on:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
+        image: gcr.io/trends-217607/trends:193599f2a213243072865f6d395e93b4a3821a56
 #        build: .
         command: celery -A trends worker -l info -Q combinations -n combinations@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - SHUTTER_TOKEN=${SHUTTER_TOKEN}
         depends_on:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
+        image: gcr.io/trends-217607/trends:193599f2a213243072865f6d395e93b4a3821a56
 #        build: .
         command: celery -A trends worker -l info -Q shutterstock_search -n shutterstock_search@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
-            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - SHUTTER_TOKEN=${SHUTTER_TOKEN}
         depends_on:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:304b92337aeb2585d3f17742128be488ea9aae37
+        image: gcr.io/trends-217607/trends:193599f2a213243072865f6d395e93b4a3821a56
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
@@ -71,7 +71,7 @@ services:
             - worker_research_task
             - worker_write_to_google
         environment:
-            - _TOKEN_SHUTTERSTOCK=${_TOKEN_SHUTTERSTOCK}
+            - SHUTTER_TOKEN=${SHUTTER_TOKEN}
         labels:
             kompose.service.type: LoadBalancer
 
