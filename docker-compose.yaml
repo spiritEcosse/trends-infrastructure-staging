@@ -7,14 +7,14 @@ services:
             - RABBITMQ_DEFAULT_USER=user
             - RABBITMQ_DEFAULT_PASS=pass
         ports:
-            - "5672:5672"
+            - "5673:5672"
             - "15672:15672"
         labels:
             kompose.service.type: LoadBalancer
 
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:a7da68a355f2995c326661a1a2c30ad36dc39923
+        image: gcr.io/trends-217607/trends:5536cebdf70389bfb325cd5b84cbec9dae516201
 #        build: .
         command: celery -A trends worker -l info -Q write_to_google -n write_to_google@%h
         volumes:
@@ -25,7 +25,7 @@ services:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:a7da68a355f2995c326661a1a2c30ad36dc39923
+        image: gcr.io/trends-217607/trends:5536cebdf70389bfb325cd5b84cbec9dae516201
 #        build: .
         command: celery -A trends worker -l info -Q research_task -n research_task@%h
         volumes:
@@ -36,7 +36,7 @@ services:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:a7da68a355f2995c326661a1a2c30ad36dc39923
+        image: gcr.io/trends-217607/trends:5536cebdf70389bfb325cd5b84cbec9dae516201
 #        build: .
         command: celery -A trends worker -l info -Q combinations -n combinations@%h
         volumes:
@@ -47,7 +47,7 @@ services:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:a7da68a355f2995c326661a1a2c30ad36dc39923
+        image: gcr.io/trends-217607/trends:5536cebdf70389bfb325cd5b84cbec9dae516201
 #        build: .
         command: celery -A trends worker -l info -Q shutterstock_search -n shutterstock_search@%h
         volumes:
@@ -58,7 +58,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:a7da68a355f2995c326661a1a2c30ad36dc39923
+        image: gcr.io/trends-217607/trends:5536cebdf70389bfb325cd5b84cbec9dae516201
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
@@ -75,14 +75,10 @@ services:
         labels:
             kompose.service.type: LoadBalancer
 
-    firefox:
-        image: selenium/standalone-firefox-debug:3.14.0-iron
-        container_name: firefox
-        volumes:
-            - /dev/shm:/dev/shm
+    phantomjs:
+        image: nkovacs/selenium-standalone-phantomjs
         ports:
             - "4444:4444"
-            - "5901:5900"
 
     redis:
         image: redis:latest
