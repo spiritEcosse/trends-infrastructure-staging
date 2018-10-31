@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
     rabbit:
@@ -14,9 +14,9 @@ services:
 
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:63233926dedf43847367d9b4057396d42b3ac4db
+        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
 #        build: .
-        command: celery -A trends worker -l info -P eventlet -c 50 -Q write_to_google -n write_to_google@%h
+        command: celery -A trends worker -l info -P eventlet -c 30 -Q write_to_google -n write_to_google@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -25,9 +25,9 @@ services:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:63233926dedf43847367d9b4057396d42b3ac4db
+        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
 #        build: .
-        command: celery -A trends worker -l info -P eventlet -c 50 -Q research_task -n research_task@%h
+        command: celery -A trends worker -l info -P eventlet -c 30 -Q research_task -n research_task@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -36,9 +36,9 @@ services:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:63233926dedf43847367d9b4057396d42b3ac4db
+        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
 #        build: .
-        command: celery -A trends worker -l info -P eventlet -c 50 -Q combinations -n combinations@%h
+        command: celery -A trends worker -l info -P eventlet -c 30 -Q combinations -n combinations@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -47,9 +47,9 @@ services:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:63233926dedf43847367d9b4057396d42b3ac4db
+        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
 #        build: .
-        command: celery -A trends worker -l info -P eventlet -c 50 -Q shutterstock_search -n shutterstock_search@%h
+        command: celery -A trends worker -l info -P eventlet -c 30 -Q shutterstock_search -n shutterstock_search@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -58,7 +58,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:63233926dedf43847367d9b4057396d42b3ac4db
+        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
