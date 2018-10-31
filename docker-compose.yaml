@@ -14,7 +14,7 @@ services:
 
 
     worker_write_to_google:
-        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
+        image: gcr.io/trends-217607/trends:9bd764ca2ff0aace9f1a97c138e1123af0c5dc17
 #        build: .
         command: celery -A trends worker -l info -P eventlet -c 30 -Q write_to_google -n write_to_google@%h
         volumes:
@@ -25,9 +25,9 @@ services:
             - rabbit
 
     worker_research_task:
-        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
+        image: gcr.io/trends-217607/trends:9bd764ca2ff0aace9f1a97c138e1123af0c5dc17
 #        build: .
-        command: celery -A trends worker -l info -P eventlet -c 30 -Q research_task -n research_task@%h
+        command: celery -A trends worker -l info -P eventlet -c 3 -Q research_task -n research_task@%h
         volumes:
             - ~/.ipython:/root/.ipython
         environment:
@@ -36,7 +36,7 @@ services:
             - rabbit
 
     worker_combinations:
-        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
+        image: gcr.io/trends-217607/trends:9bd764ca2ff0aace9f1a97c138e1123af0c5dc17
 #        build: .
         command: celery -A trends worker -l info -P eventlet -c 30 -Q combinations -n combinations@%h
         volumes:
@@ -47,7 +47,7 @@ services:
             - rabbit
 
     worker_shutterstock_search:
-        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
+        image: gcr.io/trends-217607/trends:9bd764ca2ff0aace9f1a97c138e1123af0c5dc17
 #        build: .
         command: celery -A trends worker -l info -P eventlet -c 30 -Q shutterstock_search -n shutterstock_search@%h
         volumes:
@@ -58,7 +58,7 @@ services:
             - rabbit
 
     web:
-        image: gcr.io/trends-217607/trends:f78ecac49adb517c70845b2b9f3b9736608c77c5
+        image: gcr.io/trends-217607/trends:9bd764ca2ff0aace9f1a97c138e1123af0c5dc17
 #        build: .
         volumes:
             - ~/.ipython:/root/.ipython
